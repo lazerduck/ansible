@@ -1,0 +1,17 @@
+kluster:
+  hosts:
+    worker1:
+      ansible_host: 192.168.2.109
+    worker2:
+      ansible_host: 192.168.2.108
+    worker3:
+      ansible_host: 192.168.2.90
+    worker4:
+      ansible_host: 192.168.2.93
+    worker5:
+      ansible_host: 192.168.2.29
+    worker6:
+      ansible_host: 192.168.2.129
+  vars:
+    ansible_user: ubuntu
+    ansible_password: Demosthenes6

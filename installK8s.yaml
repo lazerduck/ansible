@@ -1,0 +1,48 @@
+- name: Install k8s
+  hosts: kluster
+  tasks:
+  - name: Update cmdline
+    tags: config
+    become: true
+    ansible.builtin.lineinfile:
+      dest: /boot/firmware/cmdline.txt
+      line: "console=serial0,115200 dwc_otg.lpm_enable=0 console=tty1 root=LABEL=writable rootfstype=ext4 rootwait fixrtc quiet splash cgroup_enable=memory cgroup_memory=1"
+      insertafter: EOF
+      state: present
+
+  - name: Add hosts
+    tags: config
+    become: true
+    ansible.builtin.lineinfile:
+      dest: /etc/hosts
+      line: "{{ item.line }}" 
+      insertafter: EOF
+      state: present
+    loop:
+    - { line: '192.168.2.109 worker1' }
+    - { line: '192.168.2.108 worker2' }
+    - { line: '192.168.2.90 worker3' }
+    - { line: '192.168.2.93 worker4' }
+    - { line: '192.168.2.29 worker5' }
+    - { line: '192.168.2.129 worker6' }
+
+  - name: Extra kernel modules
+    become: true
+    ansible.builtin.apt:
+      name: "linux-modules-extra-raspi"
+      state: latest
+
+  - name: Install k8s
+    become: true
+    community.general.snap:
+      name: microk8s
+      classic: true
+      channel: 1.25
+
+  - name: Reboot
+    become: true
+    ansible.builtin.reboot:
+      
+  - name: Start k8s
+    become: true
+    ansible.builtin.shell: microk8s start
