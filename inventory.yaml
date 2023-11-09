@@ -14,4 +14,4 @@ kluster:
       ansible_host: 192.168.2.129
   vars:
     ansible_user: ubuntu
-    ansible_password: Demosthenes6
+    ansible_password: ****
